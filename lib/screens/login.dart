@@ -4,7 +4,7 @@ import '../theme.dart';
 /// Mirrors `Login.tsx`: the "Community Solid Server" styled login form.
 /// On submit it derives a WebID from the email local-part and calls [onLogin].
 class LoginScreen extends StatefulWidget {
-  final void Function(String webId) onLogin;
+  final void Function(String username, String email) onLogin;
 
   const LoginScreen({super.key, required this.onLogin});
 
@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isSignUp = false;
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -28,11 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleSubmit() {
     if (!_formKey.currentState!.validate()) return;
-    final email = _emailController.text;
-    final username = email.split('@').first.isNotEmpty
-        ? email.split('@').first
-        : 'user';
-    widget.onLogin('https://$username.solidcommunity.net/profile/card#me');
+    widget.onLogin(
+      _usernameController.text.trim(),
+      _emailController.text.trim(),
+    );
   }
 
   @override
@@ -97,6 +98,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
+
+                    // Username field
+                    _buildLabel('Username'),
+                    const SizedBox(height: 4),
+                    _buildTextField(
+                      controller: _usernameController,
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Username is required'
+                          : null,
+                    ),
+                    const SizedBox(height: 16),
 
                     // Email field
                     _buildLabel('Email'),

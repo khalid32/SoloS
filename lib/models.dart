@@ -4,12 +4,21 @@ import 'package:flutter/material.dart';
 class Persona {
   final String id;
   final String name;
+
+  /// The username entered at login. Generated (isolated) personas leave this
+  /// empty and fall back to [name] for display.
+  final String username;
+
+  /// The email entered at login. Empty for generated (isolated) personas.
+  final String email;
   final String webId;
   final bool isMaster;
 
   const Persona({
     required this.id,
     required this.name,
+    this.username = '',
+    this.email = '',
     required this.webId,
     required this.isMaster,
   });

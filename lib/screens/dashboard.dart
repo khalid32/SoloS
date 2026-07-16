@@ -4,6 +4,7 @@ import '../data.dart';
 import '../models.dart';
 import '../theme.dart';
 import 'app_runtime.dart';
+import 'persona_detail.dart';
 import 'repository.dart';
 
 /// Mirrors `Dashboard.tsx`: the workspace header, the grid of installed apps
@@ -45,6 +46,17 @@ class DashboardScreen extends StatelessWidget {
         builder: (_) => AppRuntimeScreen(
           instance: instance,
           personas: personas,
+        ),
+      ),
+    );
+  }
+
+  void _openPersonaDetail(BuildContext context, Persona persona) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PersonaDetailScreen(
+          persona: persona,
+          installedApps: installedApps,
         ),
       ),
     );
@@ -146,34 +158,11 @@ class DashboardScreen extends StatelessWidget {
           // WebID chip + logout
           Row(
             children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.slate100,
-                  borderRadius: BorderRadius.circular(9999),
-                  border: Border.all(color: AppColors.slate200),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.person_outline,
-                        size: 16, color: AppColors.slate600),
-                    const SizedBox(width: 8),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 200),
-                      child: Text(
-                        currentUser.webId,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.slate700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              _WebIdChip(
+                label: currentUser.username.isNotEmpty
+                    ? currentUser.username
+                    : currentUser.name,
+                onTap: () => _openPersonaDetail(context, currentUser),
               ),
               const SizedBox(width: 16),
               IconButton(
@@ -231,6 +220,78 @@ class DashboardScreen extends StatelessWidget {
       if (p.id == id) return p;
     }
     return null;
+  }
+}
+
+/// The clickable identity pill in the header. Shows the username and opens the
+/// identity detail page, with a hover affordance (border/color shift + chevron).
+class _WebIdChip extends StatefulWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _WebIdChip({required this.label, required this.onTap});
+
+  @override
+  State<_WebIdChip> createState() => _WebIdChipState();
+}
+
+class _WebIdChipState extends State<_WebIdChip> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Tooltip(
+          message: 'View identity details',
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: _hovering ? AppColors.amber50 : AppColors.slate100,
+              borderRadius: BorderRadius.circular(9999),
+              border: Border.all(
+                color: _hovering ? AppColors.amber300 : AppColors.slate200,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.person_outline,
+                  size: 16,
+                  color: _hovering ? AppColors.amber700 : AppColors.slate600,
+                ),
+                const SizedBox(width: 8),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    widget.label,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color:
+                          _hovering ? AppColors.amber800 : AppColors.slate700,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(
+                  Icons.chevron_right,
+                  size: 16,
+                  color: _hovering ? AppColors.amber700 : AppColors.slate400,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

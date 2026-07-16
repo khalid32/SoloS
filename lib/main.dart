@@ -23,11 +23,14 @@ class _SolosAppState extends State<SolosApp> {
   List<Persona> _personas = [];
   List<InstalledApp> _installedApps = [];
 
-  void _handleLogin(String webId) {
+  void _handleLogin(String username, String email) {
+    final slug = username.isNotEmpty ? username : 'user';
     final master = Persona(
       id: 'master',
-      name: 'Master Profile',
-      webId: webId,
+      name: username.isNotEmpty ? username : 'Master Profile',
+      username: username,
+      email: email,
+      webId: 'https://$slug.solidcommunity.net/profile/card#me',
       isMaster: true,
     );
     setState(() {
