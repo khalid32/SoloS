@@ -2,6 +2,10 @@
 
 **SoloS (Solid OS)** — The Decentralized User Space & Runtime for the Solid Web.
 
+### 🚀 [**Live demo → khalid32.github.io/SoloS**](https://khalid32.github.io/SoloS/)
+
+[![Deploy](https://github.com/khalid32/SoloS/actions/workflows/deploy.yml/badge.svg)](https://github.com/khalid32/SoloS/actions/workflows/deploy.yml)
+
 This is the Flutter/Dart port of the original React app, so the same codebase runs
 on **web, Windows, macOS, Linux, Android, and iOS**.
 
