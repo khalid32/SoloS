@@ -5,6 +5,7 @@ import '../models.dart';
 import '../theme.dart';
 import 'app_runtime.dart';
 import 'persona_detail.dart';
+import 'pod_screen.dart';
 import 'repository.dart';
 
 /// Mirrors `Dashboard.tsx`: the workspace header, the grid of installed apps
@@ -59,6 +60,12 @@ class DashboardScreen extends StatelessWidget {
           installedApps: installedApps,
         ),
       ),
+    );
+  }
+
+  void _openPod(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const PodScreen()),
     );
   }
 
@@ -164,7 +171,15 @@ class DashboardScreen extends StatelessWidget {
                     : currentUser.name,
                 onTap: () => _openPersonaDetail(context, currentUser),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
+              IconButton(
+                tooltip: 'My Solid Pod',
+                onPressed: () => _openPod(context),
+                icon: const Icon(Icons.cloud_outlined, size: 20),
+                color: AppColors.slate500,
+                hoverColor: AppColors.slate100,
+              ),
+              const SizedBox(width: 4),
               IconButton(
                 tooltip: 'Log out',
                 onPressed: onLogout,

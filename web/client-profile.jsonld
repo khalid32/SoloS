@@ -1,0 +1,25 @@
+{
+  "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
+  "client_id": "https://khalid32.github.io/SoloS/client-profile.jsonld",
+  "client_name": "SoloS",
+  "application_type": "native",
+  "redirect_uris": [
+    "https://khalid32.github.io/SoloS/callback.html",
+    "com.solos.app://redirect",
+    "http://localhost:4400/callback.html"
+  ],
+  "post_logout_redirect_uris": [
+    "https://khalid32.github.io/SoloS/callback.html",
+    "com.solos.app://redirect",
+    "http://localhost:4400/callback.html"
+  ],
+  "scope": "openid profile offline_access webid",
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code"
+  ],
+  "token_endpoint_auth_method": "none"
+}
